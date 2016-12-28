@@ -71,12 +71,6 @@
     <script src="https://rawgit.com/showdownjs/showdown/develop/dist/showdown.min.js"></script>
 
     <script>
-    var posts = [
-      'posts/making-github-blog-without-any-static-file-generator',
-      'posts/because-im-stingy',
-      'posts/incremental-games',
-      'posts/too-hard-to-not-being-tempted'
-    ];
     var main_content = $('#main_content');
     var converter = new showdown.Converter();
     var main_url = 'https://dotmonger.github.io/';
@@ -96,6 +90,7 @@
       $.getJSON('posts.json', function(posts) {
         display_all(posts, main_content, converter);
       });
+      // display_all(posts, main_content, converter);
     });
     </script>
   </body>
