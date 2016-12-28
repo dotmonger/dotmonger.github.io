@@ -1,4 +1,4 @@
-Too hard to not being tampted
+Too hard to not being tempted
 -----------------------------------------------------------------------------------------
 _Posted: 16 December 2016_
 

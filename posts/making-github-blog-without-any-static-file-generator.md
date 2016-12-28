@@ -4,7 +4,7 @@ _Posted: 28 December 2016_
 
 So, as I said earlier, here I will try to give a simple tutorial on how to blog on GitHub Pages without any third party Static-Website Generator such as Jekyll, Hexo, or such. Instead, we will use existing javascript library (which already hosted outside so we can just call it without any extra effort). So, here we go:
 
-# 0. Overview
+## 0. Overview
 To blog on Github, of course we first need to have a Github Page repository.
 
 The technologies we used here:
@@ -22,7 +22,7 @@ Folder structures:
 	- third-post.md
 ```
 
-# 1. Preparing the index.html
+## 1. Preparing the index.html
 
 ```
 <!DOCTYPE html>
@@ -78,7 +78,7 @@ Folder structures:
 </html>
 ```
 
-# 2. The scripting
+## 2. The scripting
 
 Put it before the end of body:
 ```
@@ -93,11 +93,11 @@ var posts = [
   'posts/second-post',
   'posts/third-post',
 ];
- ```
+```
 
- Initialization:
- ```
- var main_content = $('#main_content');
+Initialization:
+```
+var main_content = $('#main_content');
 var converter = new showdown.Converter();
 var main_url = 'https://dotmonger.github.io/';  
 ```
