@@ -32,6 +32,9 @@
       height: 100%;
       overflow-y: scroll;
     }
+    footer {
+      padding: 1em;
+    }
     </style>
   </head>
   <body>
@@ -60,7 +63,7 @@
     <div class="container-fluid" id="container">
       <div class="row">
         <div class="col-md-3" id="sidebar"></div>
-        <div class="col-md-9" id="main_content"></div>
+        <div class="col-md-9" id="main_content"><span>&nbsp;</span></div>
       </div>
     </div><!-- /.container -->
     
@@ -75,9 +78,11 @@
     <script src="https://rawgit.com/showdownjs/showdown/develop/dist/showdown.min.js"></script>
 
     <script>
-    var main_content = $('#main_content');
     var converter = new showdown.Converter();
     var main_url = 'https://dotmonger.github.io/';
+    var sidebar = $('#sidebar');
+    var main_content = $('#main_content');
+    var posts = [];
 
     function titelize(str) {
       var res = [];
@@ -87,28 +92,96 @@
       return res.join(' ');
     }
 
-    function display_all(posts, content, converter) {
-      var menu = '';
+    function display_sidebar(posts) {
+      // post menu
+      var menu = '<li><a href="javascript:display_home(posts);">Home</a></li>';
       $.each(posts, function (key, val) {
         var title = val.substr(6);
-        $.get(main_url + val + '.md', function(data) {
-          content.append('<a id="' + title + '"></a>')
-          content.append(converter.makeHtml(data));
-        });
-        menu += '<li><a href="#' + title + '">' + titelize(title) + '</a></li>';
+        menu += '<li><a href="javascript:display_page(\'' + title + '\');">' + titelize(title) + '</a></li>';
       })
-      $('#sidebar').append('<h2>Contents:</h2><ul>' + menu + '</ul>');
+
+      // README
+      $.get('README.md', function(data) { 
+        sidebar.html(converter.makeHtml(data) + '<h2>Contents:</h2><ul>' + menu + '</ul>');
+      });
+    }
+
+    function display_post (post, cb = function(){}) {
+      var slug = (post.constructor === Array) ? post[0] : post;
+      $.get(main_url + slug + '.md', function(data) {
+        main_content.append('<div style="display:none" id="' + slug.substr(6) + '">' + 
+          converter.makeHtml(data) + '</div>')
+        // main_content.append(converter.makeHtml(data));
+
+        $('#' + slug.substr(6)).fadeIn("slow", function() {
+          if (post.constructor === Array && post.length > 1)
+            display_post(post.slice(1, post.length), cb);
+          else
+            cb();
+        });
+      });
+    }
+
+    function display_home (posts) {
+      main_content.contents().wrapAll('<div class="temporary">').fadeOut('slow', function() {
+        main_content.html('');
+        document.location.hash = '';
+        display_post(posts);
+      });
+    }
+
+    function display_page (hash) {
+      main_content.contents().wrapAll('<div class="temporary">').fadeOut('slow', function() {
+        main_content.html('');
+      // }).fadeIn('slow', function() {
+        document.location.hash = '#' + hash;
+        display_post('posts/' + hash, function() {
+          // disqus comment section
+          main_content.append('<div id="disqus_thread"></div>');
+          DISQUS.reset({
+            reload: true,
+            config: function () {  
+              this.page.identifier = hash;  
+              this.page.url = main_url + '#' + hash;
+            }
+          });
+        });
+      });
     }
     
     $().ready(function() {
-      $.get('README.md', function(data) {
-        $('#sidebar').html(converter.makeHtml(data));
+
+      // get_post_list
+      $.getJSON('posts.json', function(p) {
+        posts = p;
+        // display_sidebar
+        display_sidebar(posts);
+
+        var hash = window.location.hash.substr(1); 
+        if (hash.length > 1 && posts.indexOf('posts/' + hash) != -1) {
+          // display_single('posts/' + hash);
+          display_page(hash);
+        } else {
+          // display_multiple(posts);
+          display_home(posts);
+        }
       });
-      $.getJSON('posts.json', function(posts) {
-        display_all(posts, main_content, converter);
-      });
-      // display_all(posts, main_content, converter);
+
     });
+
+    // DISQUS
+    var disqus_config = function () {
+      this.page.url = null;
+      this.page.identifier = null;
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = '//dotmonger-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
     </script>
   </body>
+  <footer><hr/>&copy; Copyright Dotmonger 2016</footer>
 </html>
