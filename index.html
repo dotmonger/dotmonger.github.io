@@ -83,6 +83,7 @@
     var sidebar = $('#sidebar');
     var main_content = $('#main_content');
     var posts = [];
+    var pages = {};
 
     function titelize(str) {
       var res = [];
@@ -90,6 +91,31 @@
         res.push(val.charAt(0).toUpperCase() + val.substr(1));
       });
       return res.join(' ');
+    }
+
+    function clear_display (callback) {
+      main_content.contents().wrapAll('<div class="temporary">').fadeOut('slow', function() {
+          main_content.html('');
+          callback();
+      });
+    }
+
+    function reset_disqus (hash) {
+      DISQUS.reset({
+        reload: true,
+        config: function () {  
+          this.page.identifier = hash;  
+          this.page.url = main_url + '#' + hash;
+        }
+      });
+    }
+
+    function load_posts(posts) {
+      $.each(posts, function (key, val) {
+        $.get(main_url + val + '.md', function(data) {
+          pages[val] = data;
+        });
+      });
     }
 
     function display_sidebar(posts) {
@@ -107,45 +133,34 @@
     }
 
     function display_post (post, cb = function(){}) {
-      var slug = (post.constructor === Array) ? post[0] : post;
-      $.get(main_url + slug + '.md', function(data) {
-        main_content.append('<div style="display:none" id="' + slug.substr(6) + '">' + 
-          converter.makeHtml(data) + '</div>')
-        // main_content.append(converter.makeHtml(data));
+    var slug = (post.constructor === Array) ? post[0] : post;
+    main_content.append('<div style="display:none" id="' + slug.substr(6) + '">' + 
+    converter.makeHtml(pages[slug]) + '</div>')
+    // main_content.append(converter.makeHtml(data));
 
-        $('#' + slug.substr(6)).fadeIn("slow", function() {
-          if (post.constructor === Array && post.length > 1)
-            display_post(post.slice(1, post.length), cb);
-          else
-            cb();
-        });
-      });
+    $('#' + slug.substr(6)).fadeIn("slow", function() {
+      if (post.constructor === Array && post.length > 1)
+        display_post(post.slice(1, post.length), cb);
+      else
+        cb();
+    });
     }
 
-    function display_home (posts) {
-      main_content.contents().wrapAll('<div class="temporary">').fadeOut('slow', function() {
-        main_content.html('');
+    function display_home () {
+      clear_display(function() {
         document.location.hash = '';
-        display_post(posts);
+          display_post(posts);
       });
     }
 
-    function display_page (hash) {
-      main_content.contents().wrapAll('<div class="temporary">').fadeOut('slow', function() {
-        main_content.html('');
-      // }).fadeIn('slow', function() {
-        document.location.hash = '#' + hash;
-        display_post('posts/' + hash, function() {
-          // disqus comment section
-          main_content.append('<div id="disqus_thread"></div>');
-          DISQUS.reset({
-            reload: true,
-            config: function () {  
-              this.page.identifier = hash;  
-              this.page.url = main_url + '#' + hash;
-            }
+    function display_page (page) {
+      clear_display(function() {
+        document.location.hash = '#' + page;
+          display_post('posts/' + page, function() {
+            // disqus comment section
+            main_content.append('<div id="disqus_thread"></div>');
+            reset_disqus(page);
           });
-        });
       });
     }
     
@@ -154,6 +169,9 @@
       // get_post_list
       $.getJSON('posts.json', function(p) {
         posts = p;
+
+        load_posts(posts);
+
         // display_sidebar
         display_sidebar(posts);
 
@@ -163,7 +181,7 @@
           display_page(hash);
         } else {
           // display_multiple(posts);
-          display_home(posts);
+          display_home();
         }
       });
 
