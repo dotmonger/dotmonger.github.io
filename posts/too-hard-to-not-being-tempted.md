@@ -1,5 +1,5 @@
 Too hard to not being tempted
------------------------------------------------------------------------------------------
+=============================
 _Posted: 16 December 2016_
 
 Neural Network! Genetic Algorithm! State Driven Game Agent!

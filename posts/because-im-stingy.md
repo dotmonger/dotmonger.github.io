@@ -1,5 +1,5 @@
 Because Im Stingy
-================
+=================
 _Posted: 28 December 2016_
 
 I've been longing to make a blog on github pages for a long time. So, when last night I've decided to make my new blog there, I was pretty much dissappointed knowing that to make a decent blog there I need to use some third-party static-page generator such as Jekyll. So than an idea crossed my mind, "Is there a way to do Github blogging, using markdown file managment, without any need to install anything?". Its turns out, there is a way: using browser based AJAX query + Markdown parser.

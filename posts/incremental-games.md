@@ -1,5 +1,5 @@
 Incremental Games
------------------------------------------------------------------------------------------
+=================
 _Posted: 28 December 2016_
 
 As I wrote on my intro, I really like minimalistic yet beautiful game. And my current favorite is [A Dark Room](http://adarkroom.doublespeakgames.com). I can't stressed enaugh how much its inspire me. Its simple yet mysterious, highly accessible due its web based nature, "What the" kind of a story, beautiful folding revelation.
