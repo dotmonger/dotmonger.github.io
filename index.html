@@ -55,10 +55,7 @@ body {
 
     <div class="container">
 
-      <div class="starter-template" id="main_content">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-      </div>
+      <div class="starter-template" id="main_content"></div>
 
     </div><!-- /.container -->
     
@@ -73,13 +70,27 @@ body {
     <script src="https://rawgit.com/showdownjs/showdown/develop/dist/showdown.min.js"></script>
 
     <script>
-	var main_content = $('#main_content');
-	var converter = new showdown.Converter();
-	$().ready(function() {
-		$.get('https://dotmonger.github.io/README.md', function(data) {
-			main_content.html(converter.makeHtml(data));
-		});		
-	});
+    var main_content = $('#main_content');
+    var posts = [
+      'README',
+      'posts/because-im-stingy',
+      'posts/incremental-games',
+      'posts/too-hard-to-not-being-tempted'
+    ]
+    var converter = new showdown.Converter();
+    var main_url = 'https://dotmonger.github.io/';
+
+    function display_all(content, converter) {
+      $.each(post, function (key, val) {
+        $.get(main_url + val + .'md', function(data) {
+          content.append(converter.makeHtml(data));
+        });
+      })
+    }
+    
+    $().ready(function() {
+      display_all(main_content, converter);
+    });
     </script>
   </body>
 </html>
