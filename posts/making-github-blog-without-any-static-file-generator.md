@@ -1,3 +1,30 @@
+Making A Github Blog Without Any Static-File Generator
+======================================================
+_Posted: 28 December 2016_
+
+So, as I said earlier, here I will try to give a simple tutorial on how to blog on GitHub Pages without any third party Static-Website Generator such as Jekyll, Hexo, or such. Instead, we will use existing javascript library (which already hosted outside so we can just call it without any extra effort). So, here we go:
+
+# 0. Overview
+To blog on Github, of course we first need to have a Github Page repository.
+
+The technologies we used here:
+- JQuery
+- Markdown
+- Bootstrap for styling
+- ShowdownJS : A JS library for parsing markdown
+
+Folder structures:
+```
+- index.html
+- posts/
+	- first-post.md
+	- second-post.md
+	- third-post.md
+```
+
+# 1. Preparing the index.html
+
+```
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -21,40 +48,18 @@
     <![endif]-->
 
     <style>
-    body {
-      padding-top: 50px;
-    }
-    .starter-template {
-      padding: 40px 15px;
-      text-align: left;
-    }
+		body {
+		  padding-top: 50px;
+		}
+		.starter-template {
+		  padding: 40px 15px;
+		  text-align: left;
+		}
     </style>
   </head>
   <body>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="http://dotmonger.github.io">Dotmonger</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-
     <div class="container">
-      <div class="about" id="about"></div>
 
       <div class="starter-template" id="main_content"></div>
 
@@ -69,32 +74,55 @@
 
     <!-- Showdownjs Markdown converter -->
     <script src="https://rawgit.com/showdownjs/showdown/develop/dist/showdown.min.js"></script>
-
-    <script>
-    var posts = [
-      'posts/making-github-blog-without-any-static-file-generator',
-      'posts/because-im-stingy',
-      'posts/incremental-games',
-      'posts/too-hard-to-not-being-tempted'
-    ];
-    var main_content = $('#main_content');
-    var converter = new showdown.Converter();
-    var main_url = 'https://dotmonger.github.io/';
-
-    function display_all(posts, content, converter) {
-      $.each(posts, function (key, val) {
-        $.get(main_url + val + '.md', function(data) {
-          content.append(converter.makeHtml(data));
-        });
-      })
-    }
-    
-    $().ready(function() {
-      $.get('README.md', function(data) {
-        $('#about').html(converter.makeHtml(data));
-      });
-      display_all(posts, main_content, converter);
-    });
-    </script>
   </body>
 </html>
+```
+
+# 2. The scripting
+
+Put it before the end of body:
+```
+<script type="text/javascript">
+</script>
+```
+
+Define the post list:
+```
+var posts = [
+  'posts/first-post',
+  'posts/second-post',
+  'posts/third-post',
+];
+ ```
+
+ Initialization:
+ ```
+ var main_content = $('#main_content');
+var converter = new showdown.Converter();
+var main_url = 'https://dotmonger.github.io/';  
+```
+
+Create a function to display posts:
+```
+function display_all(posts, content, converter) {
+  $.each(posts, function (key, val) {
+    $.get(main_url + val + '.md', function(data) {
+      content.append(converter.makeHtml(data));
+    });
+  })
+}
+```
+
+Main call:
+```
+$().ready(function() {
+  display_all(posts, main_content, converter);
+});
+```
+
+Thats all.
+```
+git add .
+git commit -a "First post"
+git push origin master
+```
