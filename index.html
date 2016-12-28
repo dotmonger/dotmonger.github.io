@@ -24,9 +24,13 @@
     body {
       padding-top: 50px;
     }
-    .starter-template {
+    #main_content {
       padding: 40px 15px;
       text-align: left;
+    }
+    .over {
+      height: 100%;
+      overflow-y: scroll;
     }
     </style>
   </head>
@@ -53,11 +57,11 @@
       </div>
     </nav>
 
-    <div class="container">
-      <div class="about" id="about"></div>
-
-      <div class="starter-template" id="main_content"></div>
-
+    <div class="container-fluid" id="container">
+      <div class="row">
+        <div class="col-md-3" id="sidebar"></div>
+        <div class="col-md-9" id="main_content"></div>
+      </div>
     </div><!-- /.container -->
     
 
@@ -75,17 +79,30 @@
     var converter = new showdown.Converter();
     var main_url = 'https://dotmonger.github.io/';
 
+    function titelize(str) {
+      var res = [];
+      $.each((str.split('-')), function(key, val) {
+        res.push(val.charAt(0).toUpperCase() + val.substr(1));
+      });
+      return res.join(' ');
+    }
+
     function display_all(posts, content, converter) {
+      var menu = '';
       $.each(posts, function (key, val) {
+        var title = val.substr(6);
         $.get(main_url + val + '.md', function(data) {
+          content.append('<a id="' + title + '"></a>')
           content.append(converter.makeHtml(data));
         });
+        menu += '<li><a href="#' + title + '">' + titelize(title) + '</a></li>';
       })
+      $('#sidebar').append('<h2>Contents:</h2><ul>' + menu + '</ul>');
     }
     
     $().ready(function() {
       $.get('README.md', function(data) {
-        $('#about').html(converter.makeHtml(data));
+        $('#sidebar').html(converter.makeHtml(data));
       });
       $.getJSON('posts.json', function(posts) {
         display_all(posts, main_content, converter);
