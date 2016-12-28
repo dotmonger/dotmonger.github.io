@@ -80,16 +80,16 @@ body {
     var converter = new showdown.Converter();
     var main_url = 'https://dotmonger.github.io/';
 
-    function display_all(content, converter) {
-      $.each(post, function (key, val) {
-        $.get(main_url + val + .'md', function(data) {
+    function display_all(posts, content, converter) {
+      $.each(posts, function (key, val) {
+        $.get(main_url + val + '.md', function(data) {
           content.append(converter.makeHtml(data));
         });
       })
     }
     
     $().ready(function() {
-      display_all(main_content, converter);
+      display_all(posts, main_content, converter);
     });
     </script>
   </body>
