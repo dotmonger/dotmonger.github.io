@@ -4,5 +4,6 @@ Hi, I'm Dotmonger, a crazy freelance web developer from Bandung, Indonesia. I mo
 
 Thanks for visiting!
 
-## Contacts
-- [My reddit account](https://www.reddit.com/user/dotmonger/)
+## Links
+- [Reddit account](https://www.reddit.com/user/dotmonger/)
+- [Github Profile](https://github.com/dotmonger)
