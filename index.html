@@ -93,7 +93,9 @@
       $.get('README.md', function(data) {
         $('#about').html(converter.makeHtml(data));
       });
-      display_all(posts, main_content, converter);
+      $.getJSON('posts.json', function(posts) {
+        display_all(posts, main_content, converter);
+      });
     });
     </script>
   </body>
