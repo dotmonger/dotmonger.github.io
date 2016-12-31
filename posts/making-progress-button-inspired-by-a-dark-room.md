@@ -80,16 +80,15 @@ Then the animation
 ...
 		var progress = 0;
 		var interval = setInterval(function() {
-		progress += button.step;
-		if (progress >= button.duration) {
-		  clearInterval(interval);
-		  button.disabled = false;
-		  bar.style.display = 'none';
-		} else {
-		  // button.innerText = txt + ' (' + Math.round((button.duration-progress)/1000) + 's)'
-		  bar.style.width = Math.round(progress*100/button.duration) + '%';
-		}
-		}, button.step);
+      progress += button.step;
+      if (progress >= button.duration) {
+        clearInterval(interval);
+        button.disabled = false;
+        bar.style.display = 'none';
+      } else {
+        bar.style.width = Math.round(progress*100/button.duration) + '%';
+      }
+    }, button.step);
 ...
 ```
 
@@ -149,7 +148,6 @@ var initProgressButton = function() {
           button.disabled = false;
           bar.style.display = 'none';
         } else {
-          // button.innerText = txt + ' (' + Math.round((button.duration-progress)/1000) + 's)'
           bar.style.width = Math.round(progress*100/button.duration) + '%';
         }
       }, button.step);
