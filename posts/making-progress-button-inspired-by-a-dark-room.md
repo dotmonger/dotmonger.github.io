@@ -8,7 +8,7 @@ So today I'll try to explain to you how to make a button with a progress bar ani
 
 In my oppinion, the button used in "A Dark Room" is a really good example of a nice User Interface design on a game. Its simple, intuitive, the player would immediately understand what it does just by interacting with it once. And for the use of unfolding, this kind of button is really useful, hence I make this post to try to explain it to you guys.
 
-To make a progress button (thats how we'll call them here from now), one of the easiest method is to tranform the basic _button_ element in HTML into progress bar with some CSS helping. Most of the css here is adapted from this article: (https://css-tricks.com/css3-progress-bars/) . The idea is the button should be a container of a _span_ element that will represent the growing bar of a progress bar.
+To make a progress button (thats how we'll call them here from now), one of the easiest method is to tranform the basic _button_ element in HTML into progress bar with some CSS helping. Most of the css here is adapted from [this article](https://css-tricks.com/css3-progress-bars/). The idea is the button should be a container of a _span_ element that will represent the growing bar of a progress bar.
 
 So first, lets lay down some HTML:
 
@@ -19,7 +19,7 @@ So first, lets lay down some HTML:
 along with some basic CSS
 ```
 .progressButton {
-	height: 20px;  /* Can be anything */
+  height: 20px;  /* Can be anything */
   width: 100px;
   position: relative;
   background: #FFF;
@@ -27,7 +27,7 @@ along with some basic CSS
 }
 ```
 
-Okay, after we lay down the basic, we will strat making the growing bar inside the button. To make it, here we will make a javascript function to insert all button with progressButton class with a span class, (in case you're wondering, here I use the min.js script by remy (https://github.com/remy/min.js) for the DOM selector function. Of course you could use any other JS library you like, or just use vanilla javascript if you fancy).
+Okay, after we lay down the basics, we will strat making the growing bar inside the button. To make it, here we will make a javascript function to insert all button with progressButton class with a span class, (in case you're wondering, here I use [the min.js](https://github.com/remy/min.js) script by remy for the DOM selector function. Of course you could use any other JS library you like, or just use vanilla javascript if you fancy).
 
 ```
 var initProgressButton = function() {
@@ -63,6 +63,8 @@ var initProgressButton = function() {
     button.duration = 2000;
 ...
 ```
+
+Remember that in javascript intervals, the unit used for the time is milisecond (1 second = 1000 miliseconds), so here we set by default that the loading duration (you could modify later) for the progress button is 2 second. On the other hand, the step parameter determine how often the progress bar is updated, i.e. deciding how smooth the bar progression is. Here we use 25 miliseconds as the default value.
 
 And now the handler for click event. First, some styling edit
 ```
