@@ -9,4 +9,4 @@ Thanks for visiting!
 - [Github Profile](https://github.com/dotmonger)
 
 ## Projects
-- [Cellular Ecosystem Experiments][https://dotmonger.github.io/cell/]
+- [Cellular Ecosystem Experiments](https://dotmonger.github.io/cell/)
